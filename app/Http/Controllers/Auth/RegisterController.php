@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Providers\RouteServiceProvider;
+use App\Events\Auth\UserActivationEmail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -66,10 +69,23 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'name' => htmlspecialchars($data['name']),
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
+            'token_activation' =>   random_int(100000, 999999),
+            'isVerified' => false,
         ]);
+    }
+
+    protected function registered(Request $request, $user)
+    {
+
+        //Send email
+        event(new UserActivationEmail($user));
+
+        $this->guard()->logout();
+
+        return redirect()->route('verification')->withSuccess('Registrasi berhasil, silakan cek email Anda untuk aktivasi');
     }
 }

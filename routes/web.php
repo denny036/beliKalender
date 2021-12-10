@@ -22,9 +22,21 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('penjual', 'ProdukController@index')->middleware('penjual')->name('penjual.home');
-Route::get('product/create', 'ProdukController@create')->middleware('penjual')->name('product.create');
-Route::post('product/store', 'ProdukController@store')->middleware('penjual')->name('product.store');
-Route::get('product/edit/{id}', 'ProdukController@edit')->middleware('penjual')->name('product.edit');
-Route::put('product/update/{id}', 'ProdukController@update')->middleware('penjual')->name('product.update');
-Route::get('product/delete/{id}', 'ProdukController@delete')->middleware('penjual')->name('product.delete');
+//Verification
+Route::get('/verification', 'UserController@verification')->name('verification');
+Route::post('/send/verification', 'UserController@sendOTP')->name('send.verification');
+Route::post('/resend/verification', 'UserController@resendOTP')->name('resend.verification');
+
+Route::group(['middleware' => ['penjual']], function(){
+    Route::get('penjual', 'ProdukController@index')->middleware('penjual')->name('penjual.home');
+    Route::get('product/create', 'ProdukController@create')->middleware('penjual')->name('product.create');
+    Route::post('product/store', 'ProdukController@store')->middleware('penjual')->name('product.store');
+    Route::get('product/edit/{id}', 'ProdukController@edit')->middleware('penjual')->name('product.edit');
+    Route::put('product/update/{id}', 'ProdukController@update')->middleware('penjual')->name('product.update');
+    Route::get('product/delete/{id}', 'ProdukController@delete')->middleware('penjual')->name('product.delete');
+});
+
+Route::get('pembeli', 'Pembeli\PembeliController@index')->middleware('pembeli')->name('pembeli.index');
+Route::get('checkout/{id}', 'Pembeli\PembeliController@checkout')->middleware('pembeli')->name('pembeli.checkout');
+Route::post('checkout/create/{id}', 'Pembeli\PembeliController@createCheckout')->middleware('pembeli')->name('create.checkout');
+

@@ -30,7 +30,7 @@
                             <th class="text-center">Harga</th>
                             <th class="text-center">Action</th>
                         </tr>
-                        @foreach ($products as $item)
+                        @foreach ($data as $item)
                         <tr>
                             <td class="text-center">{{ $item->id }}</td>
                             <td class="text-center">{{ $item->nama }}</td>

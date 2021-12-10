@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
@@ -47,6 +49,21 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => [
+                'required','string',
+                Rule::exists('users')->where(function ($query){
+                    $query->where('isVerified', true);
+                })
+            ],
+                'password' => 'required|string',
+        ], [
+            $this->username(). '.exists' => 'Email anda belum aktif. Silakan aktivasi terlebih dahulu!'
+        ]);
     }
 
 }

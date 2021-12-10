@@ -2,16 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ProdukController extends Controller
 {
     public function index()
     {
-        $products = Produk::all(); // mengambil semua data product
-        return view('penjual.home', compact('products'));
+        $data = Produk::where('user_id', Auth::user()->id)->paginate(7);
+
+        return view('penjual.home',compact('data'))
+            ->with('i', (request()->input('page', 1) - 1) * 7);
+
+        // $products = Produk::all(); // mengambil semua data product
+        // return view('penjual.home', compact('products'));
     }
 
     public function create()
@@ -25,11 +32,12 @@ class ProdukController extends Controller
             'gambar' => 'required|image|mimes:jpeg,png,jpg',
         ]);
 
-        $nama= $request->nama;
-        $deskripsi = $request->deskripsi;
+        $nama= htmlspecialchars($request->nama);
+        $deskripsi = htmlspecialchars($request->deskripsi);
         $jumlah = $request->jumlah;
         $harga = $request->harga;
         $file = $request->file('gambar');
+
 
         $destinationPath = 'images/produk/';
         $file->move($destinationPath, $file->getClientOriginalName());
@@ -40,6 +48,7 @@ class ProdukController extends Controller
             'jumlah' => $jumlah,
             'harga' => $harga,
             'gambar' => $file->getClientOriginalName(),
+            'user_id' => auth()->id(),
         ]);
         return redirect()->route('penjual.home')->with('success', 'Produk berhasil ditambahkan');
 
@@ -47,7 +56,7 @@ class ProdukController extends Controller
 
     public function edit($id)
     {
-        $data_products = Produk::findOrFail($id);
+        $data_products = Produk::findOrFail($id) ;
         return view('penjual.produk.edit', compact('data_products'));
     }
 
@@ -59,8 +68,8 @@ class ProdukController extends Controller
 
         $data = Produk::findOrFail($id);
 
-        $data->nama = $request->input('nama');
-        $data->deskripsi = $request->input('deskripsi');
+        $data->nama = htmlspecialchars($request->input('nama'));
+        $data->deskripsi = htmlspecialchars($request->input('deskripsi'));
         $data->jumlah  = $request->input('jumlah');
         $data->harga = $request->input('harga');
 
