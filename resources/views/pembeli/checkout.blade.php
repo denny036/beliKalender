@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 
 @section('content')
 <div class="container">
@@ -6,12 +7,19 @@
         <div class="col-md-12">
             <a href="{{ route('pembeli.index') }}" class="btn btn-sm btn-primary float-right"><i
                     class="fa fa-arrow-left"></i>Kembali</a>
+                    <a href="{{ route('pembeli.carts') }}" class="btn btn-sm btn-danger float-left"><i
+                        class="fa fa-shopping-cart"></i> Lihat Keranjang</a>
         </div>
         <div class="col-md-12 mt-2">
             <nav aria-label="breadcrumb">
+                @if ($message = Session::get('success'))
+                <div class="alert alert-success">
+                    <p>{{ $message }}</p>
+                </div>
+                @endif
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('pembeli.index') }}">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ $find_products->nama}}</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ $barang->nama}}</li>
                 </ol>
                 @if ($message = Session::get('info-jumlah'))
                 <div class="alert alert-warning">
@@ -24,29 +32,29 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-8 mx-auto">
-                            <img src="{{ asset('images/produk/' . $find_products->gambar) }}"
+                        <div class="col-md-6 mx-auto">
+                            <img src="{{ asset('images/produk/' . $barang->gambar) }}"
                                 class="rounded mx-auto d-block" width="100%" alt="">
                         </div>
-                        <div class="col-md-12 mt-5">
-                            <h2>{{ $find_products->nama}}</h2>
+                        <div class="col-md-6 mt-5">
+                            <h2>{{ $barang->nama}}</h2>
                             <table class="table">
                                 <tbody>
-                                    <form action="{{ route('create.checkout', $find_products->id) }}" method="POST">
+                                    {{-- <input type="hidden" name="user_id" id="user_id" value="{{ auth()->user()->id }}"> --}}
                                     <tr>
                                         <td>Harga</td>
                                         <td>:</td>
-                                        <td>Rp. {{ (number_format($find_products->harga))}}</td>
+                                        <td>Rp. {{ (number_format($barang->harga))}}</td>
                                     </tr>
                                     <tr>
                                         <td>Stok</td>
                                         <td>:</td>
-                                        <td>{{ number_format($find_products->jumlah) }}</td>
+                                        <td>{{ number_format($barang->jumlah) }}</td>
                                     </tr>
                                     <tr>
                                         <td>Keterangan</td>
                                         <td>:</td>
-                                        <td>{{ $find_products->deskripsi }}</td>
+                                        <td>{{ $barang->deskripsi }}</td>
                                     </tr>
 
                                         @csrf
@@ -54,62 +62,15 @@
                                             <td>Jumlah Pesan</td>
                                             <td>:</td>
                                             <td>
-                                                <input class="form-control" type="number" name="jumlah_pesanan"
+                                                <form action="{{ route('create.add-to-carts', $barang->id) }}" method="POST">
+                                                @csrf
+                                                <input class="form-control" type="text" name="jumlah_pesan"
                                                     required="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Nomor Telepon</td>
-                                            <td>:</td>
-                                            <td>
-                                                <input class="form-control" type="text" name="nomor_telepon"
-                                                    required="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alamat</td>
-                                            <td>:</td>
-                                            <td>
-                                                <input class="form-control" type="text" name="alamat" required="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Provinsi</td>
-                                            <td>:</td>
-                                            <td>
-                                                <input class="form-control" type="text" name="provinsi" required="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Kota</td>
-                                            <td>:</td>
-                                            <td>
-                                                <input class="form-control" type="text" name="kota" required="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Kecamatan</td>
-                                            <td>:</td>
-                                            <td>
-                                                <input class="form-control" type="text" name="kecamatan" required="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Kode Pos</td>
-                                            <td>:</td>
-                                            <td>
-                                                <input class="form-control" type="text" name="kode_pos" required="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td>
-                                                <button type="submit" class="btn btn-primary"><i
+                                                    <button type="submit" class="btn btn-primary mt-3"><i
                                                         class="fa fa-shopping-cart"></i> Masukkan Keranjang</button>
+                                                </form>
                                             </td>
                                         </tr>
-                                    </form>
                                 </tbody>
                             </table>
                         </div>

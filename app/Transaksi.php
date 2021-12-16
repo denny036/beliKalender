@@ -7,16 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Transaksi extends Model
 {
     public $table = 'transactions';
+    public $timestamps = false;
+
     protected $fillable = [
-        'nomor_telepon',
-        'alamat',
-        'provinsi',
-        'kota',
-        'kecamatan',
-        'kode_pos',
-        'status',
         'user_id',
-        'product_id'
+        'tanggal',
+        'status',
+        'jumlah_harga',
     ];
 
     public function user()
@@ -24,8 +21,18 @@ class Transaksi extends Model
         return $this->belongsTo('App\User','user_id');
     }
 
-    public function transaksi_user()
+    public function transaksi()
     {
         return $this->belongsTo('App\Transaksi','transactions_id');
+    }
+
+    public function transaksi_detail()
+    {
+        return $this->hasMany('App\TransaksiDetail','transactions_id', 'id');
+    }
+
+    public function produk()
+    {
+        return $this->belongsTo('App\Produk', 'product_id');
     }
 }

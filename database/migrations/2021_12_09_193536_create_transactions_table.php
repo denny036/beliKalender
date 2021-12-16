@@ -16,17 +16,19 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('product_id');
-            $table->string('nomor_telepon');
-            $table->string('alamat');
-            $table->string('provinsi');
-            $table->string('kota');
-            $table->string('kecamatan');
-            $table->string('kode_pos');
-            $table->boolean('status')->default(0)->nullable();
+            // $table->unsignedBigInteger('product_id');
+            $table->date('tanggal');
+            $table->string('status');
+            $table->integer('jumlah_harga');
+            // $table->string('alamat');
+            // $table->string('provinsi');
+            // $table->string('kota');
+            // $table->string('kecamatan');
+            // $table->string('kode_pos');
+            // $table->boolean('status')->default(0)->nullable();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('product_id')->references('id')->on('products');
+            // $table->foreign('product_id')->references('id')->on('products');
         });
     }
 

@@ -37,6 +37,11 @@ Route::group(['middleware' => ['penjual']], function(){
 });
 
 Route::get('pembeli', 'Pembeli\PembeliController@index')->middleware('pembeli')->name('pembeli.index');
-Route::get('checkout/{id}', 'Pembeli\PembeliController@checkout')->middleware('pembeli')->name('pembeli.checkout');
-Route::post('checkout/create/{id}', 'Pembeli\PembeliController@createCheckout')->middleware('pembeli')->name('create.checkout');
+Route::get('pembeli/add-to-carts/{id}', 'Pembeli\PembeliController@addToCarts')->middleware('pembeli')->name('pembeli.add-to-carts');
+Route::post('pembeli/add-to-carts/create/{id}', 'Pembeli\PembeliController@createAddToCarts')->middleware('pembeli')->name('create.add-to-carts');
+
+Route::get('pembeli/carts', 'Pembeli\PembeliController@viewCarts')->middleware('pembeli')->name('pembeli.carts');
+Route::post('pembeli/confirmation/checkout', 'Pembeli\PembeliController@checkout')->middleware('pembeli')->name('pembeli.checkout');
+
+Route::delete('pembeli/checkout/delete/{id}', 'Pembeli\PembeliController@deleteFromCarts')->middleware('pembeli')->name('pembeli.delete-from-carts');
 

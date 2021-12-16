@@ -37,8 +37,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function product_r()
+    public function product()
     {
         return $this->hasMany('App\Products', 'user_id');
+    }
+
+    public function transaksi_detail()
+    {
+        return $this->hasMany('App\TransaksiDetail', 'transactions_detail_id');
+    }
+
+    public function transaksi()
+    {
+        return $this->hasMany('App\Transaksi', 'transactions_id');
     }
 }

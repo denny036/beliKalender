@@ -16,7 +16,7 @@ class Produk extends Model
         'user_id',
     ];
 
-    public function user_r()
+    public function user()
     {
         return $this->belongsTo('App\User', 'products_id');
     }
@@ -24,5 +24,10 @@ class Produk extends Model
     public function transaksi()
     {
         return $this->hasMany('App\Transaksi', 'products_id');
+    }
+
+    public function transaksi_detail()
+    {
+        return $this->hasMany('App\TransaksiDetail', 'barang_id', 'id');
     }
 }
