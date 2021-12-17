@@ -43,6 +43,4 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 =======
-# beliKalender
-This repository contains source code of beliKalender Mini E-commerce
->>>>>>> 72cfc356547e6a4b5ecab829b21f1f1da2e2ed17
+
