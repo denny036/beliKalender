@@ -35,12 +35,4 @@
 ##Force SSL
 
 #Normal way (in case you need to deploy to NON-heroku)
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /blog/
 
-  # Force SSL
-  RewriteCond %{HTTPS} !=on
-  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-  # Remove public folder form URL
-</IfModule>
