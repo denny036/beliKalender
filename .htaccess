@@ -1,0 +1,46 @@
+# <IfModule mod_rewrite.c>
+#     <IfModule mod_negotiation.c>
+#         Options -MultiViews
+#     </IfModule>
+
+#     RewriteEngine On
+
+#     RewriteCond %{REQUEST_FILENAME} -d [OR]
+#     RewriteCond %{REQUEST_FILENAME} -f
+#     RewriteRule ^ ^$1 [N]
+
+#     RewriteCond %{REQUEST_URI} (\.\w+$) [NC]
+#     RewriteRule ^(.*)$ public/$1
+
+#     RewriteCond %{REQUEST_FILENAME} !-d
+#     RewriteCond %{REQUEST_FILENAME} !-f
+#     RewriteRule ^ server.php
+
+# 	# Disable Directory listing
+# 	Options -Indexes
+
+#     RewriteEngine On
+#     RewriteRule \.env$ - [R=403,L]
+
+# 	# block files which needs to be hidden, specify .example extension of the file
+# 	<Files ~ "\.(env|json|config.js|md|gitignore|gitattributes|lock)$">
+# 		Order allow,deny
+# 		Deny from all
+# 	</Files>
+
+# 	# Handle Authorization Header
+#     RewriteCond %{HTTP:Authorization} .
+#     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+# </IfModule>
+##Force SSL
+
+#Normal way (in case you need to deploy to NON-heroku)
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   RewriteBase /blog/
+
+#   # Force SSL
+#   RewriteCond %{HTTPS} !=on
+#   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+#   # Remove public folder form URL
+# </IfModule>
