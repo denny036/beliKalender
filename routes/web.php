@@ -23,16 +23,16 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 //Verification
-Route::get('/verification', 'UserController@verification')->name('verification');
+Route::get('/verification', 'UserController@verification')->name('verification')->middleware('throttle:60,1');
 Route::post('/send/verification', 'UserController@sendOTP')->name('send.verification');
-Route::post('/resend/verification', 'UserController@resendOTP')->name('resend.verification');
+Route::post('/resend/verification', 'UserController@resendOTP')->name('resend.verification')->middleware('throttle:60,1');
 
 Route::group(['middleware' => ['penjual']], function(){
     Route::get('penjual', 'ProdukController@index')->middleware('penjual')->name('penjual.home');
     Route::get('product/create', 'ProdukController@create')->middleware('penjual')->name('product.create');
-    Route::post('product/store', 'ProdukController@store')->middleware('penjual')->name('product.store');
+    Route::post('product/store', 'ProdukController@store')->middleware('penjual', 'throttle:60,1')->name('product.store');
     Route::get('product/edit/{id}', 'ProdukController@edit')->middleware('penjual')->name('product.edit');
-    Route::put('product/update/{id}', 'ProdukController@update')->middleware('penjual')->name('product.update');
+    Route::put('product/update/{id}', 'ProdukController@update')->middleware('penjual', 'throttle:60,1')->name('product.update');
     Route::get('product/delete/{id}', 'ProdukController@delete')->middleware('penjual')->name('product.delete');
 });
 
